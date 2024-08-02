@@ -7,7 +7,7 @@ This project is meant to be a guided take on reverse-engineering a cheap laser r
 
 ## Gathering the toys
 
-If trying to recreate this reversing or just repurposing the rangefinder to use in your side-projects, these will be usefull to have:
+If trying to recreate this reversing or just repurposing the rangefinder to use in your side-projects, these will be necessary/useful to have:
 
 - Multimeter
 - Logic analyzer
@@ -16,18 +16,18 @@ If trying to recreate this reversing or just repurposing the rangefinder to use 
 - Soldering wire
 - 3V power supply / 2x1.5V batteries
 - Microscope (optional)
-- Tweezers
+- Tweezers (optional)
 - Screwdriver
 - Prototyping wire
-- Nitril gloves
-- Spare time
+- Nitril gloves (optional)
+- Spare time (optional)
 
 
 These tools are about everything you would want to use in reversing lots of devices, from taking them apart to probing around the PCB.
 
 ### Safety precautions
 
-Be warned, every device you take apart, you will do it on your own, and you will most likely void any warranty left on it. If taking apart AC-connected devices or high-voltage DC devices, be extra-careful you don't electrocute yourself.
+> Be warned, every device you take apart, you will do it on your own, and you will most likely void any warranty left on it. If taking apart AC-connected devices or high-voltage DC devices, be extra-careful you don't electrocute yourself.
 
 ## How a rangefinder works
 
