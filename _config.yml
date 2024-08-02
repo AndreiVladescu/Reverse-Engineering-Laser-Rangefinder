@@ -1,4 +1,4 @@
 # theme: jekyll-theme-slate
+title: Laser Rangefinder Reverse Engineering 
 remote_theme: pages-themes/slate@v0.2.0
-
-url: "https://andreivladescu.github.io"
+description: This guide shows how you would reverse engineer and repurpose a commercial rangefinder. 
