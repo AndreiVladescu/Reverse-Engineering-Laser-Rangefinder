@@ -36,4 +36,4 @@ The principle that a typical rangefinder uses is time-of-flight. A beam of parti
 ![tof-principle](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/tof_principle.png)
 Knowing how these devices work, means that while using them, you **should not** stare directly into the emitter, and try to point it in a safe direction while experimenting with it.
 
-[Let's try and recon it >>](https://github.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/blob/main/recon.md)
+[Let's try and recon it >>](https://andreivladescu.github.io/Reverse-Engineering-Laser-Rangefinder/recon)
