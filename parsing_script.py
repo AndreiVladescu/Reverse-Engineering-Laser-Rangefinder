@@ -1,7 +1,7 @@
 import ast
 import csv
 
-log_names = ['1.844m', '1.111m', '0.352m']
+log_names = ['1.844m', '1.111m', '0.352m', '0.394m', '0.826m']
 
 
 def parse_packet(data_string, frame_start, frame_stop):
@@ -39,9 +39,8 @@ def log_compression(input_file_name, output_file_name, one_line_print=True):
             if data != '0x80B0' and first_line:
                 continue
             if data == '0x80B0' and first_line:
-                compressed_log_file.write('\n')
                 first_line = False
-            elif data == '0x80B0' and first_line and one_line_print:
+            elif data == '0x80B0' and not first_line and one_line_print:
                 return
             else:
                 compressed_log_file.write('\t')
@@ -78,12 +77,42 @@ def parse_csv(input_csv_file_name, output_parsing_file_name):
     input_csv_file.close()
     output_parsing_file.close()
 
+def log_diff(log_name_list, output_file_name):
+    log_name_list = [f"{name}_compressed.txt" for name in log_name_list]
+
+    try:
+        files = [open(file_name, 'r') for file_name in log_name_list]
+
+        with open(output_file_name, 'w', newline='') as output_file:
+            csv_writer = csv.writer(output_file)
+            for lines in zip(*[file.readlines() for file in files]):
+                stripped_lines = [line.rstrip('\n').replace('\t', ' ') for line in lines]
+
+                if not all(len(line) == len(stripped_lines[0]) for line in stripped_lines):
+                    raise ValueError("Lines in files are not of the same length.")
+                result = ''.join(
+                    char if all(char == other_line[i] for other_line in stripped_lines)
+                    else '='
+                    for i, char in enumerate(stripped_lines[0])
+                )
+
+                for substring in result.split():
+                    csv_writer.writerow([substring])
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        for file in files:
+            file.close()
 
 if __name__ == "__main__":
     for log_name in log_names:
         log_name_csv = log_name + '.csv'
         log_name_parsed = log_name + '_parsed.log'
-        log_name_compressed = log_name + '_compressed.log'
+        log_name_compressed = log_name + '_compressed.txt'
 
         parse_csv(log_name_csv, log_name_parsed)
         log_compression(log_name_parsed, log_name_compressed)
+    log_diff(log_names, 'diff_file.csv')
