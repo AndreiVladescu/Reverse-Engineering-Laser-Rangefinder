@@ -31,7 +31,7 @@ These tools are about everything you would want to use in reversing lots of devi
 
 ## How a rangefinder works
 
-The principle that a typical rangefinder uses is time-of-flight. A beam of particles (in our case, invisible light) are thrown in a direction. When they reflect from a surface, some of then come back and will hit a receiver on the rangefinder. The distance is calculated by the formula $d = \frac{t}{2}$
+The principle that a typical rangefinder uses is time-of-flight. A beam of particles (in our case, invisible light) are thrown in a direction. When they reflect from a surface, some of then come back and will hit a receiver on the rangefinder. The distance is calculated with the formula `d = t / 2`.
 
 ![tof-principle](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/tof_principle.png)
 Knowing how these devices work, means that while using them, you **should not** stare directly into the emitter, and try to point it in a safe direction while experimenting with it.
