@@ -1,3 +1,4 @@
+
 ###  Analyzing I2C Packets
 
 After correctly stating that I2C data flows from the microcontroller, we must now understand *how* it works. The microcontroller would be an I2C master, and the screen (because it's connected directly to the I2C line) is the slave. The keyboard is not an I2C device, as through many tries, there is no specific data to/from this device.
@@ -18,7 +19,7 @@ We can surmise that the data being sent is as words, since data is being repeate
 
 After many attempts at manually seeing a difference, I resorted to Python, and I wrote a complicated code that does simple things, mainly taking all the data from a I2C packet, such as `start + address + data[0] + data[1] + stop` and concatenating only data[0] and data[1]. You can find the code on this repo. I made a csv file from all those exports of data and then differentiated them all together. Then, I did the same, but I added 1.111 meter measurement, so that I can see where the first digit is first used. 
 
-Sure enough, an anomaly came through, and we can read it at the 57th I2C 'packet'. 
+Sure enough, an anomaly came through, and we can read it at the 56th I2C 'packet'. 
 
 ![Anomaly of first digit '0'](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/diff.png)
 
@@ -36,16 +37,38 @@ So, the first byte of the word is `0xC0` always, we can ignore that for now, but
 
 This is the table of codes after I crunched many more measurements:
 
-| Digit | Without Decimal | With Decimal  |
-|-------|-----------------|---------------|
-| 0     | 0xC012 0xC01E   | 0xC01A 0xC01E |
-| 1     | 0xC000 0xC006   | 0xC008 0xC016 |
-| 2     | 0xC006 0xC01C   | 0xC01E 0xC01C |
-| 3     | 0xC004 0xC01E   | 0xC01C 0xC01E |
-| 4     | 0xC014 0xC006   | 0xC01C 0xC006 |
-| 5     | 0xC014 0xC01A   | 0xC01C 0xC01A |
-| 6     | 0xC016 0xC01A   | 0xC01E 0xC01A |
-| 7     | 0xC000 0xC016   | 0xC008 0xC016 |
-| 8     | 0xC016 0xC01E   | 0xC01E 0xC01E |
-| 9     | 0xC014  0xC01E  | 0xC01C 0xC01E |
+| Digit | Without Decimal | With Decimal Dot |
+|-------|-----------------|------------------|
+| 0     | 0xC012 0xC01E   | 0xC01A 0xC01E    |
+| 1     | 0xC000 0xC006   | 0xC008 0xC016    |
+| 2     | 0xC006 0xC01C   | 0xC01E 0xC01C    |
+| 3     | 0xC004 0xC01E   | 0xC01C 0xC01E    |
+| 4     | 0xC014 0xC006   | 0xC01C 0xC006    |
+| 5     | 0xC014 0xC01A   | 0xC01C 0xC01A    |
+| 6     | 0xC016 0xC01A   | 0xC01E 0xC01A    |
+| 7     | 0xC000 0xC016   | 0xC008 0xC016    |
+| 8     | 0xC016 0xC01E   | 0xC01E 0xC01E    |
+| 9     | 0xC014 0xC01E   | 0xC01C 0xC01E    |
+
+Moreover, we know that these values always appear at the position of 52nd I2C 'packet', meaning there are being sent 52 * 2 = 104 bytes of data before having the full picture of the measurement. Also, each full measurement cycle takes up 99 'packets'.
+
+### Keyboard emulation
+
+One question remains, before trying to reuse the rangefinder. How do we start/stop it, and how do we action the measurement button, or the others? They don't appear in the I2C packets when we press them, so how come?
+
+ If we go back to the recon phase, where we looked over the pins of the 20-pin ribbon cable connector, we can see that some pins go to the keyboard.
+
+![pinout of the 20 pin connector](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/pinouts.png)
+
+While this 3 wire connection might be worth pursuing, I didn't go the mile and microsoldered wire to those small connectors, and I decided to just hack the keyboard and induce shorts digitally, instead of mechanically pushing the keyboard. 
+
+![Setup for keyboard](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/setup_keyboard.jpg)
+
+I want to see what kind of signals are transmitted over the line. We can't expect for them to be a pure HIGH or LOW, so we need an oscilloscope to analyze this. Instead of bringing out a full  scope, we can use the feature of the Logic Pro, where pins can be used as analog inputs.
+
+![Logic Pro Oscilloscope View](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/oscilloscope.png)
+
+The first 2 traces are from the measurement key, and the last 2 are from the power key. The traces show that power key pin 1 should be pulled high to 3.3V to start the rangefinder. The measurement key pin 1 must be pulled low for it to take a measurement.
+ 
+[Let's try and reuse it >>](https://andreivladescu.github.io/Reverse-Engineering-Laser-Rangefinder/reuse)
 
