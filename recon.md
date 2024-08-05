@@ -71,4 +71,4 @@ I2C or IIC comes from Inter-Integrated Circuit, and it's a bit different to how 
 ![I2C Typical Wiring](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/I2C_controller-target.png)
 This is a typical I2C bus wiring, with one controller and some peripherals. Every device has an ID, or an address, in I2C terms. What you must know, is that the devices talking on the I2C bus first need to address the device before sending data, as it otherwise would be ambiguous. 
 
-[Let's try and decipher it >>](https://github.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/blob/main/decipher.md)
+[Let's try and decipher it >>](https://andreivladescu.github.io/Reverse-Engineering-Laser-Rangefinder/decipher)
