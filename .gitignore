@@ -1,6 +1,5 @@
 
 *.log
-*.csv
 /shelf/
 /workspace.xml
 # Editor-based HTTP Client requests
@@ -10,3 +9,4 @@
 /dataSources.local.xml
 .idea/
 *.txt
+diff_file.csv
