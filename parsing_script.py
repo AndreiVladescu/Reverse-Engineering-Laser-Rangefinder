@@ -1,6 +1,8 @@
 import ast
 import csv
 
+log_names = ['1.844m', '1.111m', '0.352m']
+
 
 def parse_packet(data_string, frame_start, frame_stop):
     frame_strings = data_string.strip().split('\n')
@@ -23,42 +25,34 @@ def parse_packet(data_string, frame_start, frame_stop):
                          'DELIMITER=========================\n=======================================================================\n') + parsed_packet
     return parsed_packet
 
-def log_compression():
-    log_file = open('parsed_data.log', 'r')
-    compressed_log_file = open('compressed_parsed_data.log', 'w')
 
-    lines_skipped = 0
-    print_compression = False
-    last_line = ''
+def log_compression(input_file_name, output_file_name, one_line_print=True):
+    log_file = open(input_file_name, 'r')
+    compressed_log_file = open(output_file_name, 'w')
+
     first_line = True
 
     for line in log_file:
+        data = line.split()
+        try:
+            data = data[10]
+            if data != '0x80B0' and first_line:
+                continue
+            if data == '0x80B0' and first_line:
+                compressed_log_file.write('\n')
+                first_line = False
+            elif data == '0x80B0' and first_line and one_line_print:
+                return
+            else:
+                compressed_log_file.write('\t')
+            compressed_log_file.write(str(data))
+        except:
+            ...
 
-        if line.find('0xC000') != -1:
-            lines_skipped = lines_skipped + 1
-            if lines_skipped == 1 and print_compression:
-                compressed_log_file.write('...')
-        else:
-            if lines_skipped > 0:
-                if print_compression:
-                    compressed_log_file.write(' x ' + str(lines_skipped) + '\n' + last_line)
-                lines_skipped = 0
-            data = line.split()
-            try:
-                data = data[10]
-                if data == '0x80B0' and first_line:
-                    compressed_log_file.write('\n')
-                else:
-                    compressed_log_file.write('\t')
-                compressed_log_file.write(str(data))
-            except:
-                ...
 
-            last_line = line
-
-def parse_csv():
-    input_csv_file = open('data_i2c.csv', mode='r')
-    output_parsing_file = open('parsed_data.log', 'w')
+def parse_csv(input_csv_file_name, output_parsing_file_name):
+    input_csv_file = open(input_csv_file_name, mode='r')
+    output_parsing_file = open(output_parsing_file_name, 'w')
 
     csv_reader = csv.reader(input_csv_file)
 
@@ -74,7 +68,6 @@ def parse_csv():
             frame += str(row) + '\n'
             parsed_packet = parse_packet(frame, frame_start, row_index)
             output_parsing_file.write(parsed_packet)
-            # print(f'Frame starts at {frame_start} and stops at {row_index}:\n{frame}')
             frame = ''
         elif row[0] != 'name':
             frame += str(row) + '\n'
@@ -87,5 +80,10 @@ def parse_csv():
 
 
 if __name__ == "__main__":
-    #parse_csv()
-    log_compression()
+    for log_name in log_names:
+        log_name_csv = log_name + '.csv'
+        log_name_parsed = log_name + '_parsed.log'
+        log_name_compressed = log_name + '_compressed.log'
+
+        parse_csv(log_name_csv, log_name_parsed)
+        log_compression(log_name_parsed, log_name_compressed)
