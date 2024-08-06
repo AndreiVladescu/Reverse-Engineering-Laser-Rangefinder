@@ -34,3 +34,5 @@ This code can be adapted to listen to the address of `0x3F` and then convert the
 Do **not** forget that most Arduinos (UNO, Nano) work at 5V logic level, so you don't want to pull the line HIGH directly, because you'll be pushing 5V on a line that expects 3.3V, it's not be going to be fun for the device. You **need** to use a level shifter for the I2C also, and if you get a 4 channel one, you can wire that up to the HIGH also. I used a 4-channel logic level shifter.
 
 ![Logic Level Shifter](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/logic_level_shifter.png)
+
+The "LV" - Low Voltage is connected to 3.3V and "HV" - High Voltage is connected to 5V and the GND should be common. After that, the Arduino IO will be wired to HV and the rangefinder's IO to LV. 
