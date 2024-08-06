@@ -31,8 +31,8 @@ Adapting this rangefinder to UART can be done by having a secondary microcontrol
 
 This code can be adapted to listen to the address of `0x3F` and then convert the I2C packets to floating numbers, which can be sent over the UART interface. Also, We can use the digital outputs of the Arduino to pull LOW or HIGH the rangefinder to measure or turn it on and off. 
 
-Do **not** forget that most Arduinos (UNO, Nano) work at 5V logic level, so you don't want to pull the line HIGH directly, because you'll be pushing 5V on a line that expects 3.3V, it's not be going to be fun for the device. You **need** to use a level shifter for the I2C also, and if you get a 4 channel one, you can wire that up to the HIGH also. I used a 4-channel logic level shifter.
+Do **not** forget that most Arduinos (UNO, Nano) work at 5V logic level, so you don't want to pull the line HIGH directly, because you'll be pushing 5V on a line that expects 3.3V, it's not be going to be fun for the device. You **need** to use a level shifter for the I2C also, and if you get a 4 channel one, you can wire that up to the HIGH also.
 
 ![Logic Level Shifter](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/logic_level_shifter.png)
 
-The "LV" - Low Voltage is connected to 3.3V and "HV" - High Voltage is connected to 5V and the GND should be common. After that, the Arduino IO will be wired to HV and the rangefinder's IO to LV. 
+The "LV" - Low Voltage is connected to 3.3V and "HV" - High Voltage is connected to 5V and the GND should be common. After that, the Arduino IO will be wired to HV and the rangefinder's IO to LV. I tried using an Arduino Uno, but I didn't manage to capture all the packets of the I2C communication, even at 400kHz frequency. After that, I tried using the code above, but with a Raspberry Pi Pico, and it worked, just like that. 4 hours for trying to debug a thing, when I could've tried the Raspberry Pi Pico. Maybe it's from the speed of the microcontroller, since it's almost 10 times faster than the ATMega256 that the Uno uses.
