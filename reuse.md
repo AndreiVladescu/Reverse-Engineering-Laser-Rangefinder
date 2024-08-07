@@ -39,9 +39,10 @@ The "LV" - Low Voltage is connected to 3.3V and "HV" - High Voltage is connected
 
 The neat part about the Pico is that I don't even need to convert the code from Arduino C++ to something else, thanks to Earle F. Philhower, who made RP2040 code for the Arduino Core.
 
- After wiring up the pico to the rangefinder,  we can see that the microcontroller can indeed understand the rangefinder. We now need to make the code to press the keyboard buttons. This should be easy, as the keyboard is not consuming a lot of current, we can drive it low or high directly from the pins of the Pico, and since it's using a 3.3V logic, we don't need logic level shifters.
+After wiring up the pico to the rangefinder,  we can see that the microcontroller can indeed understand the rangefinder. We now need to make the code to press the keyboard buttons. This should be easy, as the keyboard is not consuming a lot of current, we can drive it low or high directly from the pins of the Pico, and since it's using a 3.3V logic, we don't need logic level shifters.
 
 ![Arduino IDE Measurement](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/arduino_measurement.png)
+
 This is the physical setup, with the measurement and power pins directly wired to the keyboard. 
 
 ![Arduino IDE Measurement](https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/complete_setup.jpg)
