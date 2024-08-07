@@ -198,9 +198,9 @@ void loop() {
 
     uint32_t time_now = micros();
 
-    if (micros() - time_now > 50000){
+    if (micros() - time_now > 500000){
         command_byte = Serial.read();
-        
+
         if (command_byte == 0x11){
             measure_distance();
         }
