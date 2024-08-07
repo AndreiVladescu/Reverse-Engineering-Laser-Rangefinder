@@ -3,10 +3,16 @@
 #define I2C_DEV_ADDR 0x3F // address of the display
 #define DEBUGGING true
 
+const int power_pin = 15;   // pin for powering the device
+const int measure_pin = 16; // pin for measuring
+const int buzzer_pin = 17; // pin for toggling the buzzer
+
 uint16_t data[4];                // data array
 uint8_t index = 0;               // word array for i2c packets
 uint8_t first_digit_offset = 52; // offset for i2c words where the first measurement beggins
 char digits[8];                  // array for the digits
+
+uint8_t command_byte = 0;       // command byte for the uart communication
 
 inline void clearData()
 {
@@ -138,12 +144,76 @@ void onReceive(int len)
 #endif
 }
 
+void stop_device()
+{
+    digitalWrite(power_pin, HIGH);
+    delay(5000);
+    digitalWrite(power_pin, LOW);
+}
+
+void start_device()
+{
+    digitalWrite(power_pin, HIGH);
+    delay(100);
+    digitalWrite(power_pin, LOW);
+}
+
+void measure_distance()
+{
+    digitalWrite(measure_pin, LOW);
+    delay(50);
+    digitalWrite(measure_pin, HIGH);
+    delay(50);
+    digitalWrite(measure_pin, LOW);
+    delay(50);
+    digitalWrite(measure_pin, HIGH);
+}
+
+void toggle_buzzer()
+{
+    pinMode(buzzer_pin, OUTPUT);
+    digitalWrite(buzzer_pin, LOW);
+    delay(50);
+    pinMode(buzzer_pin, INPUT_PULLUP);
+}
+
 void setup()
 {
     Serial.begin(115200);
+
+    pinMode(power_pin, OUTPUT);
+    digialWrite(power_pin, LOW);
+    pinMode(measure_pin, OUTPUT);
+    pinMode(buzzer_pin, INPUT_PULLUP);
+
+    start_device();
+
     Wire.setClock(400000);
     Wire.onReceive(onReceive);
     Wire.begin(I2C_DEV_ADDR);
+    delay(2000);
 }
 
-void loop() {}
+void loop() {
+
+    uint32_t time_now = micros();
+
+    if (micros() - time_now > 50000){
+        command_byte = Serial.read();
+        
+        if (command_byte == 0x11){
+            measure_distance();
+        }
+        else if (command_byte == 0x22){
+            toggle_buzzer();
+        }
+        else if (command_byte == 0x33){
+            stop_device();
+        }
+        else if (command_byte == 0x44){
+            stop_device();
+        }
+        time_now = micros();
+    }
+    
+}
