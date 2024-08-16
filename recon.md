@@ -42,7 +42,7 @@ Before testing, I insert 3.3V inside the battery pins, the voltage regulator cir
  
 To test the UART, we'll hook up a LA probe to the pins of the module, firstly trying with TX. We do this since we can't be sure of all the other unmarked pins, so  we may miss out.   
 
-We will use the Logic 2 software from Saleae, and the Logic Analyzer Logic Pro 16.
+We will use the Logic 2 software from Saleae, and the Logic Analyzer Logic Pro 16. You can find the download link for the software and the logic analyzer at [https://www.saleae.com/](https://www.saleae.com/). I endorse their products, as I really like the flexibility of the software - there are some really nice community extensions also.
 
 ##### The UART Setup
 <img src="https://raw.githubusercontent.com/AndreiVladescu/Reverse-Engineering-Laser-Rangefinder/main/images/uart_capture_setup.png" alt="UART LA setup" width="700"/>
